@@ -203,34 +203,44 @@ class MainWindowUI:
         self.rightLinenumbers.config(state=DISABLED)
 
     # Scroll bars
-    def scrollBoth(self, action, position, type=None):
+    def scrollBothY(self, action, position, type=None):
         self.leftFileTextArea.yview_moveto(position)
         self.rightFileTextArea.yview_moveto(position)
         self.leftLinenumbers.yview_moveto(position)
         self.rightLinenumbers.yview_moveto(position)
 
-    def updateScroll(self, first, last, type=None):
+    def updateScrollY(self, first, last, type=None):
         self.leftFileTextArea.yview_moveto(first)
         self.rightFileTextArea.yview_moveto(first)
         self.leftLinenumbers.yview_moveto(first)
         self.rightLinenumbers.yview_moveto(first)
         self.uniScrollbar.set(first, last)
 
+    def scrollBothX(self, action, position, type=None):
+        self.leftFileTextArea.xview_moveto(position)
+        self.rightFileTextArea.xview_moveto(position)
+
+    def updateScrollX(self, first, last, type=None):
+        self.leftFileTextArea.xview_moveto(first)
+        self.rightFileTextArea.xview_moveto(first)
+        self.leftHorizontalScrollbar.set(first, last)
+        self.rightHorizontalScrollbar.set(first, last)
+
     def create_scroll_bars(self):
         self.uniScrollbar = Scrollbar(self.main_window)
         self.uniScrollbar.grid(row=self.uniScrollbarRow, column=self.uniScrollbarCol, sticky=NS)
-        self.uniScrollbar.config(command=self.scrollBoth)
-        self.leftFileTextArea.config(yscrollcommand=self.updateScroll)
-        self.rightFileTextArea.config(yscrollcommand=self.updateScroll)
-        self.leftLinenumbers.config(yscrollcommand=self.updateScroll)
-        self.rightLinenumbers.config(yscrollcommand=self.updateScroll)
+        self.uniScrollbar.config(command=self.scrollBothY)
+        self.leftFileTextArea.config(yscrollcommand=self.updateScrollY)
+        self.rightFileTextArea.config(yscrollcommand=self.updateScrollY)
+        self.leftLinenumbers.config(yscrollcommand=self.updateScrollY)
+        self.rightLinenumbers.config(yscrollcommand=self.updateScrollY)
 
-        leftHorizontalScrollbar = Scrollbar(self.main_window, orient=HORIZONTAL)
-        leftHorizontalScrollbar.grid(row=self.horizontalScrollbarRow, column=self.leftHorizontalScrollbarCol, sticky=EW)
-        leftHorizontalScrollbar.config(command=self.leftFileTextArea.xview)
-        self.leftFileTextArea.config(xscrollcommand=leftHorizontalScrollbar.set)
+        self.leftHorizontalScrollbar = Scrollbar(self.main_window, orient=HORIZONTAL)
+        self.leftHorizontalScrollbar.grid(row=self.horizontalScrollbarRow, column=self.leftHorizontalScrollbarCol, sticky=EW)
+        self.leftHorizontalScrollbar.config(command=self.scrollBothX)
+        self.leftFileTextArea.config(xscrollcommand=self.updateScrollX)
 
-        rightHorizontalScrollbar = Scrollbar(self.main_window, orient=HORIZONTAL)
-        rightHorizontalScrollbar.grid(row=self.horizontalScrollbarRow, column=self.rightHorizontalScrollbarCol, sticky=EW)
-        rightHorizontalScrollbar.config(command=self.rightFileTextArea.xview)
-        self.rightFileTextArea.config(xscrollcommand=rightHorizontalScrollbar.set)
+        self.rightHorizontalScrollbar = Scrollbar(self.main_window, orient=HORIZONTAL)
+        self.rightHorizontalScrollbar.grid(row=self.horizontalScrollbarRow, column=self.rightHorizontalScrollbarCol, sticky=EW)
+        self.rightHorizontalScrollbar.config(command=self.scrollBothX)
+        self.rightFileTextArea.config(xscrollcommand=self.updateScrollX)
